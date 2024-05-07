@@ -1,0 +1,29 @@
+#! /bin/bash
+
+/usr/bin/python eefracs_ratio.py --pdf eefracs_ratio.pdf
+
+mkdir -p qe
+perl qeN0009.pl --outfile qe/hrciD1999-07-22qeN0009.fits
+
+scp -p qe/hrciD1999-07-22qeN0009.fits ascda3:/data/wdocs/rpete
+
+perl -MPDL -MPDL::Graphics::PGPLOT -le '
+    ($w,$n,$p) = rcols("new_old_ratio.txt", 0..2, { lines => "2:-1" });
+    dev "EE_new_old.ps/vcps", 1, 2, { hardlw => 2, hardch => 1.5 };
+    autolog(1);
+    line($w, $p, { xtitle=>"\\gl", ytitle=>"EE new/old", yrange=>[0.88, 1]});
+    hold;
+    line($w, $n, { color=>2, linestyle=>2 });
+    legend(["TG_M=+1","TG_M=-1"],100,0.97,{color=>[1,2], linestyle=>[1,2]});
+    release;
+
+    line($w,$p/(0.5*($n+$p)),{xtitle=>"\\gl",ytitle=>"EE new/old / mean", yrange => [0.996, 1.004]});
+    hold;
+    line($w,$n/(0.5*($n+$p)), { color=>2, linestyle=>2 });
+    legend(["TG_M=+1","TG_M=-1"],80,1.0035,{color=>[1,2], linestyle=>[1,2]});
+    release;
+'
+
+/usr/bin/python plot_N0009_ratio.py
+
+scp -p hrci_eefrac_ratio_N0004_0003.png ascda3:/data/wdocs/rpete/twiki/hrci_qe

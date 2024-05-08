@@ -1,0 +1,33 @@
+#! /bin/bash
+
+cat -- << EOP
+Reverse the low-energy ramp back up to one which was introduced in
+N0008. That is, multiply all of N0007 by 0.901023, and then reapply
+the N0009 changes
+
+From Vinay's email on 2017-03-07:
+
+> Actually, it may be simpler than I had thought -- take
+> /data/hrc/HRCI_QE_Jan10/hrciD1999-07-22qeN0007prime_renorm.fits and
+> scale it uniformly by 0.901023, that should bring everything into
+> line and make the HZ43 fluxes match up.
+
+EOP
+
+# later, the 0.901023 was changed to a multiplicative factor of 0.85
+
+mkdir -p HRCI_QE_Jan10
+scp -p \
+    ascda3:/data/hrc/HRCI_QE_Jan10/hrciD1999-07-22qeN0007prime_renorm.fits \
+    ./HRCI_QE_Jan10
+
+mkdir -p qe
+perl qeN0010.pl --ourfile qe/hrciD1999-07-22qeN0010.fits
+
+/usr/bin/python ../hrci_cmpqefiles.py \
+		../N0009/qe/hrciD1999-07-22qeN0009.fits \
+		./qe/hrciD1999-07-22qeN0010.fits \
+		--y '\textrm{N0010 / N0009}' \
+		-o hrci_qe_ratio_N0010_N0009.png
+
+scp -p hrci_qe_ratio_N0010_N0009.png ascda3:/data/wdocs/rpete/twiki/hrci_qe

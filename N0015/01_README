@@ -1,0 +1,20 @@
+#! /bin/bash
+
+v=N0015
+
+mkdir -p ./hrciqe
+echo rsync -e 'ssh -p 1235' -avn --delete localhost:/data/hrc/HAT/20240507/ ./hrciqe
+
+for d in $(ls ./hrciqe)
+do
+    indir=./hrciqe/$d
+    outdir=./qe.$d
+    rm -rf $outdir
+    perl ../N0014/qeN0014.pl \
+	 --indir=$indir \
+	 --outdir=$outdir \
+	 --outver=$v
+done
+
+rm -rf qe
+ln -s ./qe.25 ./qe

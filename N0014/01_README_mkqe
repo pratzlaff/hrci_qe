@@ -1,0 +1,52 @@
+#! /bin/bash
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+v=N0014
+gopogo
+
+<<'COMMENT'
+indir=./hrciqe
+rm -rf $indir
+mkdir -p $indir
+
+scp -P 1235 -pr localhost:'/data/hrc/HAT/20230926*/hrciqe*' $indir
+outdir=./qe
+rm -rf $outdir
+
+perl ../N0014/qeN0014.pl --outver=$v
+COMMENT
+
+<<'COMMENT'
+indir=./20231110.hrciqe
+rm -rf "$indir"
+mkdir "$indir"
+scp -P 1235 -Cpr localhost:/data/hrc/HAT/"$indir"/'{?,??}' "$indir"
+COMMENT
+
+#for  i in {0..3} 5 {8..21} 23 25
+for  i in 25
+do
+  indir=./20231110.hrciqe/$i
+  outdir=./qe.20231110_$(printf %02d $i)
+
+  rm -rf "$outdir"
+
+  perl ../N0014/qeN0014.pl \
+       --indir="$indir" \
+       --outdir="$outdir" \
+       --outver=$v
+done
+
+rm -rf qe
+ln -s ./qe.20231110_25 ./qe
+
+#
+# Now,
+# 
+# cd /data/legs/rpete/flight/hz43
+# vi 0READMEs/04_README_arfs
+# /bin/bash 0READMEs/04_README_arfs
+# cd -
+#

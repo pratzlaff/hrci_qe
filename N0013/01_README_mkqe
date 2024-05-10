@@ -1,0 +1,35 @@
+#! /bin/bash
+
+v=N0013
+
+ssh  -N -L 1235:ascda3:22 rpete@pogo4.cfa.harvard.edu -f
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210701/hrciqe ./hrciqe.20210701a
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210701/hrciqeB ./hrciqe.20210701b
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210513.hrciqe_HZ43+G21.5_qeloss/hrciqe ./hrciqe.20210513
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210729.hrciqe_HZ43+hrcihetg_HR1099spectra/hrciqeD ./hrciqe.20210729d
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210729.hrciqe_HZ43+hrcihetg_HR1099spectra/hrciqeE ./hrciqe.20210729e
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210805\*/hrciqeF\* ./hrciqe.20210805f
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210805\*/hrciqeG\* ./hrciqe.20210805g
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210812\*/hrciqeH\* ./hrciqe.20210812h
+#scp -P 1235 -pr localhost:/data/hrc/HAT/20210812\*/hrciqeI\* ./hrciqe.20210812i
+scp -P 1235 -pr localhost:/data/hrc/HAT/20210812\*/hrciqeJ\* ./hrciqe.20210812j
+scp -P 1235 -pr localhost:/data/hrc/HAT/20210812\*/hrciqeK\* ./hrciqe.20210812k
+
+for d in 20210812j 20210812k
+do
+  indir=./hrciqe.$d
+  outdir=./qe.$d
+  rm -rf $outdir
+  perl ../N0013/qeN0013.pl --indir=$indir --outdir=$outdir --outver=$v
+done
+
+ln -fs ./qe.20210812j ./qe
+
+#
+# Now,
+# 
+# cd /data/legs/rpete/flight/xcal_hrcsi
+# vi 0READMEs/04_README_arfs
+# /bin/bash 0READMEs/04_README_arfs
+# cd -
+#

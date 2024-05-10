@@ -1,0 +1,24 @@
+#! /bin/bash
+
+verold=12
+vernew=13
+
+#
+# First,
+# 
+# cd /data/legs/rpete/flight/xcal_hrcsi
+# vi 0READMEs/04_README_arfs
+# /bin/bash 0READMEs/04_README_arfs
+# cd -
+#
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+mkdir -p plots
+
+/usr/bin/python3 ../N0011/mk_ECR_plot.py -p plots/hz43_0th_hrci_qe_${verold}_vs_${vernew}.pdf N00${verold} N00${vernew}
+
+xcal=/data/legs/rpete/flight/xcal_hrcsi
+
+env ARFPATH=$xcal/arfs/I_qe_N00${vernew} \
+    /usr/bin/python3 $xcal/src/lc_0th.py --nohrcs --pdf ./plots/hz43_0th_hrci_qe_N00${vernew}.pdf

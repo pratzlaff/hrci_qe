@@ -1,0 +1,16 @@
+#! /bin/bash
+
+rm -rf fits
+mkdir -p fits
+scp -p ascda3:/data/hrc/HAT/20200618/qe/\*.fits ./fits
+
+perl ../N0011/qeN0011.pl --outver N0012
+
+#
+# Now,
+# 
+# cd /data/legs/rpete/flight/xcal_hrcsi
+# vi 0READMEs/04_README_arfs
+# /bin/bash 0READMEs/04_README_arfs
+# cd -
+#

@@ -1,0 +1,31 @@
+#! /bin/bash
+
+# compare garf generated from caldb with garf generated using N0009
+# HRC-I:QE and N0003 region file
+
+source /usr/local/ciao/bin/ciao.sh
+
+for obsid in 17378
+do
+
+    qefile=/data/legs/rpete/flight/hrci_qe/hrciD1999-07-22qeN0009.fits
+
+    punlearn ardlib
+
+    perl /data/legs/rpete/flight/dev/tg_reprocess \
+    	/data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid \
+    	--outdir=/data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid/tg_reprocess_qeN0008 \
+    	2>&1 | tee /data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid/tg_reprocess_qeN0008.log
+
+    perl /data/legs/rpete/flight/dev/tg_reprocess \
+    	/data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid \
+    	--outdir=/data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid/tg_reprocess_qeN0009 \
+    	--qefile=$qefile \
+    	--lsfparmfile=/data/legs/rpete/flight/extraction_efficiency/hrcs_leg_lsfparm_N0004/hrcsleg1D1999-07-22lsfparmN0004.fits \
+    	2>&1 | tee /data/legs/rpete/flight/xcal_hrcsi/data/hz43/$obsid/tg_reprocess_qeN0009.log
+
+    /usr/bin/python plot_response.py $obsid --pdf response_ratio_$obsid.pdf
+
+done
+
+punlearn ardlib

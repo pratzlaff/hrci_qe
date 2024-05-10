@@ -1,0 +1,21 @@
+#! /bin/bash
+
+rm -rf fits
+mkdir -p fits
+scp -p ascda3:/data/hrc/HAT/20180516/hrciqe_final//\*.fits ./fits
+
+perl qeN0011.pl
+
+#
+# Now,
+# 
+# cd /data/legs/rpete/flight/xcal_hrcsi
+# vi 04_README_arfs
+# /bin/bash 04_README_arfs
+# cd -
+#
+
+# scp -p ascda3:/data/hrc/HAT/20180328.hrciqe_bowtiebackground/'adjust_hrciQE{,_fromhrcs}'.rdb .
+# perl qeN0011a.pl
+# perl qeN0011b.pl
+# 

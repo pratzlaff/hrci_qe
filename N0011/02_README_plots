@@ -1,0 +1,25 @@
+#! /bin/bash
+
+#
+# First,
+# 
+# cd /data/legs/rpete/flight/xcal_hrcsi
+# vi 04_README_arfs
+# /bin/bash 04_README_arfs
+# cd -
+#
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+mkdir -p plots
+
+/usr/bin/python mk_ECR_plot.py -p plots/hrci_qe_10_vs_11.pdf N0010 N0011
+
+
+xcal=/data/legs/rpete/flight/xcal_hrcsi
+
+env ARFPATH=$xcal/arfs/I_qe_N0010 \
+    /usr/bin/python $xcal/lc_0th.py --nohrcs --pdf ./plots/hz43_0th_hrci_qe_N0010.pdf
+
+env ARFPATH=$xcal/arfs/I_qe_N0011 \
+    /usr/bin/python $xcal/lc_0th.py --nohrcs --pdf ./plots/hz43_0th_hrci_qe_N0011.pdf

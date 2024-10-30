@@ -157,7 +157,12 @@ sub construct_cvsd {
 
     if ($i==0) { push @cvsd, '1999-07-29'; }
     else {
-      push @cvsd, sprintf("%04d-%02d-%02d", frac2ymd(0.5*($dates->[$i]+$dates->[$i-1])));
+      if ($dates->[$i] eq '2024.72') {
+	push @cvsd, '2024-09-20';
+      }
+      else {
+	push @cvsd, sprintf("%04d-%02d-%02d", frac2ymd(0.5*($dates->[$i]+$dates->[$i-1])));
+      }
     }
 
   }
@@ -195,6 +200,7 @@ sub update_dates {
 
   my $cvst = '00:00:00';
   $cvst = '13:09:07' if $cvsd eq '2021-02-16';
+  $cvst = '12:00:00' if $cvsd eq '2024-09-20';
 
   $fptr->update_key_str('cvsd0001', $cvsd.'T'.$cvst, undef, $s);
   $fptr->update_key_str('cvst0001', $cvst, undef, $s);
